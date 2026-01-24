@@ -16,7 +16,7 @@ public class InMemoryUserRepository implements UserRepository {
     private static final Map<Long, User> storage = new HashMap<>();
 
     @PostConstruct
-    static void populateStorage() {
+    private void populateStorage() {
         storage.put(1L, new User(1, "test@example.com"));
     }
 
