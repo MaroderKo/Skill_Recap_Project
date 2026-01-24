@@ -13,10 +13,10 @@ import java.time.LocalDateTime;
 public class GlobalRestExceptionHandler {
 
     @ExceptionHandler(ApiException.class)
-    public ResponseEntity<ErrorResponseDTO> handleUserNotFoundException(ApiException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponseDTO> handleApiException(ApiException ex, HttpServletRequest request) {
         return ResponseEntity.status(ex.getErrorCode().getHttpStatus()).body(
                 new ErrorResponseDTO(
-                        ex.getErrorCode().toString(),
+                        ex.getErrorCode().name(),
                         ex.getMessage(),
                         request.getServletPath(),
                         LocalDateTime.now()
