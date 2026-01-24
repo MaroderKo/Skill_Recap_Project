@@ -1,7 +1,9 @@
 package com.dex.srp.exception;
 
-public class UserNotFoundException extends RuntimeException {
-    public UserNotFoundException(String message) {
-        super(message);
+import com.dex.srp.domain.ErrorCode;
+
+public class UserNotFoundException extends ApiException {
+    public UserNotFoundException(Long userId) {
+        super(String.format("User with id %d not found", userId), ErrorCode.ENTITY_NOT_FOUND);
     }
 }
