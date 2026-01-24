@@ -50,7 +50,7 @@ class UserControllerTest {
 
     @Test
     void testNegativeFindUserById() throws Exception {
-        Mockito.when(userService.findById(1)).thenThrow(new UserNotFoundException(String.format("User with id %d not found", 1)));
+        Mockito.when(userService.findById(1)).thenThrow(new UserNotFoundException(1L));
         mockMvc.perform(get("/users/1"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("User with id " + 1 + " not found"))
