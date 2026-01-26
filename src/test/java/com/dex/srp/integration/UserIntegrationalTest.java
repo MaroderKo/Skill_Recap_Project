@@ -1,4 +1,4 @@
-package com.dex.srp.integrational;
+package com.dex.srp.integration;
 
 import com.dex.srp.domain.User;
 import com.dex.srp.domain.dto.UserDto;
