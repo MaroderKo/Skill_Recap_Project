@@ -1,6 +1,17 @@
 spring:
   application:
     name: SkillRecapProject
+  datasource:
+    url: jdbc:postgresql://localhost:5432/srp_db
+    username: postgres
+    password: PostgresPass123
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
 management:
   endpoints:
     web:
@@ -8,3 +19,4 @@ management:
         include:
           - health
           - beans
+          - flyway
