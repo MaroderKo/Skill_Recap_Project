@@ -2,20 +2,20 @@ package com.dex.srp.domain;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 @Entity
 @Table(name = "users")
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
+@NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
+@EqualsAndHashCode
+@ToString
 public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String email;
-
-    protected  User() {
-    }
 }
