@@ -42,12 +42,8 @@ public class UserService {
         return save(user);
     }
 
-    public boolean delete(long id) {
-        if (findById(id) != null) {
-            userRepository.deleteById(id);
-            return true;
-        }
-        return false;
+    public void delete(long id) {
+        userRepository.deleteById(id);
     }
 
 }

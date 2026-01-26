@@ -4,6 +4,7 @@ import com.dex.srp.domain.User;
 import com.dex.srp.domain.dto.UserDto;
 import com.dex.srp.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,11 +38,8 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable long id) {
-        if (userService.delete(id)) {
-            return ResponseEntity.noContent().build();
-        }
-        // Should newer be called
-        return ResponseEntity.badRequest().build();
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable long id) {
+        userService.delete(id);
     }
 }
