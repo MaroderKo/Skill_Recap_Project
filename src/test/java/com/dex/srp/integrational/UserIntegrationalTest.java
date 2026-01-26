@@ -58,7 +58,7 @@ class UserIntegrationalTest {
         UserDto userDto = new UserDto("test@example.com");
         ResponseEntity<User> response = restTemplate.postForEntity("/users", userDto, User.class);
 
-        assertThat(response.getStatusCode().value()).isSameAs(200);
+        assertThat(response.getStatusCode().value()).isEqualTo(200);
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().getId()).isEqualTo(1L);
         assertThat(response.getBody().getEmail()).isEqualTo("test@example.com");
