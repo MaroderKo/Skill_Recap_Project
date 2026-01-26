@@ -37,7 +37,7 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
-    @Transactional(rollbackFor = {IOException.class, UserNotFoundException.class})
+    @Transactional
     public User update(long id, UserDto dto) {
         User user = findById(id);
         if (dto.email() != null) {
