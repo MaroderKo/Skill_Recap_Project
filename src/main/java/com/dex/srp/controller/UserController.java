@@ -18,8 +18,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> save(@RequestBody User user) {
-        return ResponseEntity.ok(userService.save(user));
+    public ResponseEntity<User> save(@RequestBody UserDto userDto) {
+        return ResponseEntity.ok(userService.save(userDto));
     }
 
     @GetMapping

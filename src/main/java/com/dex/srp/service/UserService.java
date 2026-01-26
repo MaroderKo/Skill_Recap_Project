@@ -19,6 +19,10 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    public User save(UserDto userDto) {
+        return save(new User(null, userDto.email()));
+    }
+
     public User save(User user) {
         log.info("save user with email : {}", user.getEmail());
         return userRepository.save(user);
