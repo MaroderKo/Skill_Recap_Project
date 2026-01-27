@@ -92,7 +92,7 @@ class UserIntegrationalTest {
     }
 
     @Test
-    void readUserPostitve() {
+    void readUserPositive() {
         User user = saveUser(new UserDto("test@example.com"));
 
         ResponseEntity<String> response = restTemplate.getForEntity("/users/1", String.class);
