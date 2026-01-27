@@ -1,0 +1,15 @@
+name: SRP
+services:
+  srp_db:
+    image: postgres:17.7-alpine
+    container_name: srp_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: PostgresPass123
+      POSTGRES_DB: srp_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+volumes:
+  postgres_data:

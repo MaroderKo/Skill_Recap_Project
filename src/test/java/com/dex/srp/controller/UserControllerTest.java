@@ -30,7 +30,7 @@ class UserControllerTest {
 
     @Test
     void testFindAllUsers() throws Exception {
-        var users = List.of(new User(1, "test@example.com"));
+        var users = List.of(new User(1L, "test@example.com"));
         Mockito.when(userService.findAll()).thenReturn(users);
         mockMvc.perform(get("/users"))
                 .andExpect(status().isOk())
@@ -40,7 +40,7 @@ class UserControllerTest {
 
     @Test
     void testPositiveFindUserById() throws Exception {
-        User user = new User(1, "test@example.com");
+        User user = new User(1L, "test@example.com");
         Mockito.when(userService.findById(1)).thenReturn(user);
         mockMvc.perform(get("/users/1"))
                 .andExpect(status().isOk())
