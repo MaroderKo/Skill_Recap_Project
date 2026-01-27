@@ -2,10 +2,7 @@ package com.dex.srp.integration;
 
 import com.dex.srp.domain.User;
 import com.dex.srp.domain.dto.UserDto;
-import com.dex.srp.exception.UserNotFoundException;
-import com.dex.srp.service.UserService;
 import com.jayway.jsonpath.JsonPath;
-import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +11,7 @@ import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRe
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -22,7 +20,6 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -41,16 +38,18 @@ class UserIntegrationalTest {
     }
 
     @Autowired
-    private TestRestTemplate restTemplate;
+    JdbcTemplate jdbcTemplate;
 
     @Autowired
-    private UserService userService;
-
+    TestRestTemplate restTemplate;
 
     @BeforeEach
-    void setUp(@Autowired Flyway flyway) {
-        flyway.clean();
-        flyway.migrate();
+    void setUp() {
+        jdbcTemplate.execute("truncate table users RESTART IDENTITY CASCADE ");
+    }
+
+    private User saveUser(UserDto userDto) {
+        return restTemplate.postForEntity("/users", userDto, User.class).getBody();
     }
 
     @Test
@@ -67,8 +66,8 @@ class UserIntegrationalTest {
 
     @Test
     void updateUser() {
-        User user = new User(null, "test@example.com");
-        userService.save(user);
+        saveUser(new UserDto("test@example.com"));
+
         UserDto userDto = new UserDto("test1@example.com");
         User responseUser = restTemplate.patchForObject("/users/1", userDto, User.class);
 
@@ -79,14 +78,13 @@ class UserIntegrationalTest {
 
     @Test
     void readAllUsers() {
-        User user = new User(null, "test@example.com");
-        userService.save(user);
-        User user1 = new User(null, "test1@example.com");
-        userService.save(user1);
+        User user = saveUser(new UserDto("test@example.com"));
+        User user1 = saveUser(new UserDto("test1@example.com"));
 
         ResponseEntity<String> response = restTemplate.getForEntity("/users", String.class);
         assertThat(response.getStatusCode().value()).isEqualTo(200);
         String responseBody = response.getBody();
+
         assertThat((Integer) JsonPath.read(responseBody, "$[0].id")).isEqualTo(1);
         assertThat((String) JsonPath.read(responseBody, "$[0].email")).isEqualTo(user.getEmail());
         assertThat((Integer) JsonPath.read(responseBody, "$[1].id")).isEqualTo(2);
@@ -95,8 +93,7 @@ class UserIntegrationalTest {
 
     @Test
     void readUserPostitve() {
-        User user = new User(null, "test@example.com");
-        userService.save(user);
+        User user = saveUser(new UserDto("test@example.com"));
 
         ResponseEntity<String> response = restTemplate.getForEntity("/users/1", String.class);
         assertThat(response.getStatusCode().value()).isEqualTo(200);
@@ -116,8 +113,7 @@ class UserIntegrationalTest {
 
     @Test
     void deleteUser() {
-        User user = new User(null, "test@example.com");
-        userService.save(user);
+        saveUser(new UserDto("test@example.com"));
         ResponseEntity<Void> response = restTemplate.exchange("/users/1",
                 HttpMethod.DELETE,
                 null,
@@ -125,7 +121,7 @@ class UserIntegrationalTest {
 
         assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
 
-        assertThrows(UserNotFoundException.class, () -> userService.findById(1));
+        assertThat(restTemplate.getForEntity("/users/1", String.class).getStatusCode().value()).isEqualTo(404);
 
     }
 
