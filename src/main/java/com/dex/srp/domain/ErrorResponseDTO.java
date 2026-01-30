@@ -1,11 +1,12 @@
 package com.dex.srp.domain;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 public record ErrorResponseDTO(
-        String code,
+        String errorCode,
         String message,
         String path,
-        LocalDateTime timestamp
+        OffsetDateTime timestamp,
+        String traceId
 ) {
 }

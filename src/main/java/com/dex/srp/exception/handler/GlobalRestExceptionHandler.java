@@ -2,15 +2,21 @@ package com.dex.srp.exception.handler;
 
 import com.dex.srp.domain.ErrorResponseDTO;
 import com.dex.srp.exception.ApiException;
+import com.dex.srp.util.TraceIdProvider;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class GlobalRestExceptionHandler {
+
+    private final TraceIdProvider traceIdProvider;
 
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<ErrorResponseDTO> handleApiException(ApiException ex, HttpServletRequest request) {
@@ -18,8 +24,9 @@ public class GlobalRestExceptionHandler {
                 new ErrorResponseDTO(
                         ex.getErrorCode().name(),
                         ex.getMessage(),
-                        request.getServletPath(),
-                        LocalDateTime.now()
+                        request.getRequestURI(),
+                        OffsetDateTime.now(ZoneOffset.UTC),
+                        traceIdProvider.getTraceId()
                 )
         );
     }
