@@ -54,7 +54,7 @@ class UserControllerTest {
         mockMvc.perform(get("/users/1"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("User with id " + 1 + " not found"))
-                .andExpect(jsonPath("$.code").value("ENTITY_NOT_FOUND"));
+                .andExpect(jsonPath("$.error_code").value("ENTITY_NOT_FOUND"));
     }
 
 

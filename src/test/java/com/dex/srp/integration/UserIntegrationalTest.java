@@ -107,7 +107,7 @@ class UserIntegrationalTest {
         ResponseEntity<String> response = restTemplate.getForEntity("/users/1", String.class);
         assertThat(response.getStatusCode().value()).isEqualTo(404);
         String responseBody = response.getBody();
-        assertThat((String) JsonPath.read(responseBody, "$.code")).isEqualTo("ENTITY_NOT_FOUND");
+        assertThat((String) JsonPath.read(responseBody, "$.error_code")).isEqualTo("ENTITY_NOT_FOUND");
         assertThat((String) JsonPath.read(responseBody, "$.path")).isEqualTo("/users/1");
     }
 
