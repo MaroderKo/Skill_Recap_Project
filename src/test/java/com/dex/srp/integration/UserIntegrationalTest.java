@@ -54,51 +54,60 @@ class UserIntegrationalTest {
 
     @Test
     void createUser() {
-        UserDto userDto = new UserDto("test@example.com");
+        UserDto userDto = new UserDto("test@example.com", "user1", 18);
         ResponseEntity<User> response = restTemplate.postForEntity("/users", userDto, User.class);
+        User responseUser = response.getBody();
 
         assertThat(response.getStatusCode().value()).isEqualTo(200);
-        assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getId()).isEqualTo(1L);
-        assertThat(response.getBody().getEmail()).isEqualTo("test@example.com");
+        assertThat(responseUser).isNotNull();
+        assertThat(responseUser.getId()).isEqualTo(1L);
+        assertThat(responseUser.getEmail()).isEqualTo("test@example.com");
+        assertThat(responseUser.getUsername()).isEqualTo("user1");
+        assertThat(responseUser.getAge()).isEqualTo(18);
 
     }
 
     @Test
     void updateUser() {
-        saveUser(new UserDto("test@example.com"));
+        saveUser(new UserDto("test@example.com", "user1", 18));
 
-        UserDto userDto = new UserDto("test1@example.com");
+        UserDto userDto = new UserDto("test1@example.com", "user1", 18);
         User responseUser = restTemplate.patchForObject("/users/1", userDto, User.class);
 
         assertThat(responseUser).isNotNull();
         assertThat(responseUser.getId()).isEqualTo(1L);
         assertThat(responseUser.getEmail()).isEqualTo("test1@example.com");
+        assertThat(responseUser.getUsername()).isEqualTo("user1");
+        assertThat(responseUser.getAge()).isEqualTo(18);
     }
 
     @Test
     void readAllUsers() {
-        User user = saveUser(new UserDto("test@example.com"));
-        User user1 = saveUser(new UserDto("test1@example.com"));
+        User user = saveUser(new UserDto("test@example.com", "user1", 18));
+        User user1 = saveUser(new UserDto("test1@example.com", "user2", 19));
 
         ResponseEntity<String> response = restTemplate.getForEntity("/users", String.class);
         assertThat(response.getStatusCode().value()).isEqualTo(200);
         String responseBody = response.getBody();
 
-        assertThat((Integer) JsonPath.read(responseBody, "$[0].id")).isEqualTo(1);
+        assertThat(JsonPath.parse(responseBody).read("$[0].id", Long.class)).isEqualTo(1L);
         assertThat((String) JsonPath.read(responseBody, "$[0].email")).isEqualTo(user.getEmail());
-        assertThat((Integer) JsonPath.read(responseBody, "$[1].id")).isEqualTo(2);
+        assertThat((String) JsonPath.read(responseBody, "$[0].username")).isEqualTo(user.getUsername());
+        assertThat((Integer) JsonPath.read(responseBody, "$[0].age")).isEqualTo(user.getAge());
+        assertThat(JsonPath.parse(responseBody).read("$[1].id", Long.class)).isEqualTo(2L);
         assertThat((String) JsonPath.read(responseBody, "$[1].email")).isEqualTo(user1.getEmail());
+        assertThat((String) JsonPath.read(responseBody, "$[1].username")).isEqualTo(user1.getUsername());
+        assertThat((Integer) JsonPath.read(responseBody, "$[1].age")).isEqualTo(user1.getAge());
     }
 
     @Test
     void readUserPositive() {
-        User user = saveUser(new UserDto("test@example.com"));
+        User user = saveUser(new UserDto("test@example.com", "user1", 18));
 
         ResponseEntity<String> response = restTemplate.getForEntity("/users/1", String.class);
         assertThat(response.getStatusCode().value()).isEqualTo(200);
         String responseBody = response.getBody();
-        assertThat((Integer) JsonPath.read(responseBody, "$.id")).isEqualTo(1);
+        assertThat(JsonPath.parse(responseBody).read("$.id", Long.class)).isEqualTo(1L);
         assertThat((String) JsonPath.read(responseBody, "$.email")).isEqualTo(user.getEmail());
     }
 
@@ -109,11 +118,13 @@ class UserIntegrationalTest {
         String responseBody = response.getBody();
         assertThat((String) JsonPath.read(responseBody, "$.error_code")).isEqualTo("ENTITY_NOT_FOUND");
         assertThat((String) JsonPath.read(responseBody, "$.path")).isEqualTo("/users/1");
+        assertThat((String) JsonPath.read(responseBody, "$.trace_id")).isNotNull();
+        assertThat((String) JsonPath.read(responseBody, "$.timestamp")).isNotNull();
     }
 
     @Test
     void deleteUser() {
-        saveUser(new UserDto("test@example.com"));
+        saveUser(new UserDto("test@example.com", "user1", 18));
         ResponseEntity<Void> response = restTemplate.exchange("/users/1",
                 HttpMethod.DELETE,
                 null,

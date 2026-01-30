@@ -19,4 +19,10 @@ public class User{
 
     @Column(unique = true, nullable = false, length = 320)
     private String email;
+
+    @Column(unique = true)
+    private String username;
+
+    @Column
+    private Integer age;
 }

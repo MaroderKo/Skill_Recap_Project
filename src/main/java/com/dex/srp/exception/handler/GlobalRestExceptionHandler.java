@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.HashMap;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
@@ -27,6 +28,7 @@ public class GlobalRestExceptionHandler {
                         ex.getErrorCode().name(),
                         ex.getMessage(),
                         request.getRequestURI(),
+                        new HashMap<>(),
                         OffsetDateTime.now(ZoneOffset.UTC),
                         traceId
                 )
