@@ -52,7 +52,12 @@ public class UserService {
     }
 
     public void delete(long id) {
-        userRepository.deleteById(id);
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+        }
+        else {
+            throw new UserNotFoundException(id);
+        }
     }
 
 }
