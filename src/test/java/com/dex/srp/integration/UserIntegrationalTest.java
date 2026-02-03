@@ -25,7 +25,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @ActiveProfiles("test")
 @Testcontainers
 @AutoConfigureTestRestTemplate
-class UserIntegrationalTest {
+class UserIntegrationTest {
 
     @Container
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:17.7-alpine");
