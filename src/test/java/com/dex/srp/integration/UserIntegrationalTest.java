@@ -71,12 +71,12 @@ class UserIntegrationalTest {
     void updateUser() {
         saveUser(new UserDto("test@example.com", "user1", 18));
 
-        UserDto userDto = new UserDto("test1@example.com", "user1", 18);
+        UserDto userDto = new UserDto(null, "user1", 18);
         User responseUser = restTemplate.patchForObject("/users/1", userDto, User.class);
 
         assertThat(responseUser).isNotNull();
         assertThat(responseUser.getId()).isEqualTo(1L);
-        assertThat(responseUser.getEmail()).isEqualTo("test1@example.com");
+        assertThat(responseUser.getEmail()).isEqualTo("test@example.com");
         assertThat(responseUser.getUsername()).isEqualTo("user1");
         assertThat(responseUser.getAge()).isEqualTo(18);
     }

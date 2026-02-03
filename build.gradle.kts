@@ -30,6 +30,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-flyway")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-micrometer-tracing-brave")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("io.micrometer:micrometer-tracing-bridge-brave")
 
     compileOnly("org.projectlombok:lombok")

@@ -63,13 +63,13 @@ class UserControllerTest {
         Mockito.when(userService.findById(1)).thenThrow(new UserNotFoundException(1L));
         mockMvc.perform(get("/users/1"))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value("User with id " + 1 + " not found"))
+                .andExpect(jsonPath("$.message").value("User not found"))
                 .andExpect(jsonPath("$.error_code").value("ENTITY_NOT_FOUND"));
     }
 
     @Test
     void testUpdateUser() throws Exception {
-        UserDto userDto = new UserDto("test@example.com", "user1", 18);
+        UserDto userDto = new UserDto(null, "user1", 18);
         Mockito.when(userService.update(1, userDto)).thenReturn(new User(1L, "test@example.com", "user1", 18));
 
         mockMvc.perform(patch("/users/1").content(objectMapper.writeValueAsString(userDto)).contentType(MediaType.APPLICATION_JSON))
