@@ -13,6 +13,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -25,7 +27,7 @@ public class GlobalRestExceptionHandler {
     private ErrorResponseDTO buildResponse(ErrorCode errorCode, String path, Map<String, String> details) {
         TraceIdProvider localTraceIdProvider = this.traceIdProvider.getIfAvailable();
         String traceId = localTraceIdProvider != null ? localTraceIdProvider.getTraceId() : null;
-        return new ErrorResponseDTO(errorCode.name(), errorCode.getDefaultMessage(), path, details, traceId);
+        return new ErrorResponseDTO(errorCode.name(), errorCode.getDefaultMessage(), path, details, OffsetDateTime.now(ZoneOffset.UTC), traceId);
     }
 
     @ExceptionHandler(ApiException.class)
