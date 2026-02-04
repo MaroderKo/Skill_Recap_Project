@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -20,7 +19,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     public User save(UserDto userDto) {
-        return save(new User(null, userDto.email()));
+        return save(new User(null, userDto.email(), userDto.username(), userDto.age()));
     }
 
     public User save(User user) {
@@ -43,11 +42,18 @@ public class UserService {
         if (dto.email() != null) {
             user.setEmail(dto.email());
         }
+        if (dto.username() != null) {
+            user.setUsername(dto.username());
+        }
+        if (dto.age() != null) {
+            user.setAge(dto.age());
+        }
         return save(user);
     }
 
     public void delete(long id) {
-        userRepository.deleteById(id);
+        User user = findById(id);
+        userRepository.delete(user);
     }
 
 }

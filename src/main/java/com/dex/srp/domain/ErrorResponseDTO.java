@@ -1,11 +1,19 @@
 package com.dex.srp.domain;
 
-import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-public record ErrorResponseDTO(
-        String code,
-        String message,
-        String path,
-        LocalDateTime timestamp
-) {
+import java.time.OffsetDateTime;
+import java.util.Map;
+
+@RequiredArgsConstructor
+@Getter
+public final class ErrorResponseDTO {
+    private final String errorCode;
+    private final String message;
+    private final String path;
+    private final Map<String, String> details;
+    private final OffsetDateTime timestamp;
+    private final String traceId;
+
 }

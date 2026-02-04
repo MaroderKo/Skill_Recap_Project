@@ -12,6 +12,8 @@ spring:
     hibernate:
       ddl-auto: validate
     open-in-view: false
+  jackson:
+    property-naming-strategy: SNAKE_CASE
 management:
   endpoints:
     web:
@@ -20,3 +22,9 @@ management:
           - health
           - beans
           - flyway
+  tracing:
+    sampling:
+      probability: 1
+logging:
+  level:
+    org.hibernate.orm.connections: warn
