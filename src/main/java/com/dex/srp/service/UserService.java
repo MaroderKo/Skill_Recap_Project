@@ -18,6 +18,13 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+
+    /**
+     * Saves user.
+     *
+     * @param userDto user data
+     * @return created user
+     */
     public User save(UserDto userDto) {
         return save(new User(null, userDto.email(), userDto.username(), userDto.age()));
     }
@@ -27,15 +34,35 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    /**
+     * Returns all users.
+     *
+     * @return list of all users
+     */
     public List<User> findAll() {
         log.info(">findAll function of UserService");
         return userRepository.findAll();
     }
 
+    /**
+     * Returns user by given identifier.
+     *
+     * @param id user identifier.
+     * @return existing user
+     * @throws UserNotFoundException when user with given id does not exist
+     */
     public User findById(long id) {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
+    /**
+     * Updates mutable user fields.
+     *
+     * @param id user identifier
+     * @param dto data to update
+     * @return updated user
+     * @throws UserNotFoundException when user with given id does not exist
+     */
     @Transactional
     public User update(long id, UserDto dto) {
         User user = findById(id);
@@ -51,6 +78,11 @@ public class UserService {
         return save(user);
     }
 
+    /**
+     * Deletes user by identifier.
+     *
+     * @param id user identifier
+     */
     public void delete(long id) {
         User user = findById(id);
         userRepository.delete(user);
