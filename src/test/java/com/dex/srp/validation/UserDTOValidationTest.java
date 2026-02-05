@@ -98,7 +98,7 @@ class UserDTOValidationTest {
         userDto = new UserDto("aaaaaaaaaa", "user1", 20);
         violations = getValidationConstraintsErrorList(userDto, ValidationGroup.OnUpdate.class);
         assertThat(violations).hasSize(1)
-                .contains("Username cannot be changed after registration");
+                .contains("Email cannot be changed after registration");
 
     }
 

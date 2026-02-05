@@ -63,15 +63,16 @@ public class UserService {
      * @param dto data to update
      * @return updated user
      * @throws UserNotFoundException when user with given id does not exist
+     * @throws IllegalArgumentException when one of fields is not valid
      */
-    @Transactional
+    @Transactional(rollbackFor = IllegalArgumentException.class)
     public User update(long id, UserDto dto) {
         User user = getUserOrThrow(id);
         if (dto.username() != null) {
-            user.setUsername(dto.username());
+            user.changeUsername(dto.username());
         }
         if (dto.age() != null) {
-            user.setAge(dto.age());
+            user.changeAge(dto.age());
         }
         return user;
     }
