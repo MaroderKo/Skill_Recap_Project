@@ -40,7 +40,6 @@ class UserControllerTest {
         Mockito.when(userService.findAll()).thenReturn(users);
         mockMvc.perform(get("/users"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1))
                 .andExpect(jsonPath("$[0].email").value("test@example.com"))
                 .andExpect(jsonPath("$[0].username").value("user1"))
                 .andExpect(jsonPath("$[0].age").value(18));
@@ -52,7 +51,6 @@ class UserControllerTest {
         Mockito.when(userService.findById(1)).thenReturn(user);
         mockMvc.perform(get("/users/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.email").value("test@example.com"))
                 .andExpect(jsonPath("$.username").value("user1"))
                 .andExpect(jsonPath("$.age").value(18));
@@ -74,7 +72,6 @@ class UserControllerTest {
 
         mockMvc.perform(patch("/users/1").content(objectMapper.writeValueAsString(userDto)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.email").value("test@example.com"))
                 .andExpect(jsonPath("$.username").value("user1"))
                 .andExpect(jsonPath("$.age").value(18));

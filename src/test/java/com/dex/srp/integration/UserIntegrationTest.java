@@ -60,7 +60,6 @@ class UserIntegrationTest {
 
         assertThat(response.getStatusCode().value()).isEqualTo(200);
         assertThat(responseUser).isNotNull();
-        assertThat(responseUser.getId()).isEqualTo(1L);
         assertThat(responseUser.getEmail()).isEqualTo("test@example.com");
         assertThat(responseUser.getUsername()).isEqualTo("user1");
         assertThat(responseUser.getAge()).isEqualTo(18);
@@ -72,13 +71,12 @@ class UserIntegrationTest {
         saveUser(new UserDto("test@example.com", "user1", 18));
 
         UserDto userDto = new UserDto(null, "user1", 18);
-        User responseUser = restTemplate.patchForObject("/users/1", userDto, User.class);
+        UserDto responseUser = restTemplate.patchForObject("/users/1", userDto, UserDto.class);
 
         assertThat(responseUser).isNotNull();
-        assertThat(responseUser.getId()).isEqualTo(1L);
-        assertThat(responseUser.getEmail()).isEqualTo("test@example.com");
-        assertThat(responseUser.getUsername()).isEqualTo("user1");
-        assertThat(responseUser.getAge()).isEqualTo(18);
+        assertThat(responseUser.email()).isEqualTo("test@example.com");
+        assertThat(responseUser.username()).isEqualTo("user1");
+        assertThat(responseUser.age()).isEqualTo(18);
     }
 
     @Test
@@ -90,11 +88,9 @@ class UserIntegrationTest {
         assertThat(response.getStatusCode().value()).isEqualTo(200);
         String responseBody = response.getBody();
 
-        assertThat(JsonPath.parse(responseBody).read("$[0].id", Long.class)).isEqualTo(1L);
         assertThat((String) JsonPath.read(responseBody, "$[0].email")).isEqualTo(user.getEmail());
         assertThat((String) JsonPath.read(responseBody, "$[0].username")).isEqualTo(user.getUsername());
         assertThat((Integer) JsonPath.read(responseBody, "$[0].age")).isEqualTo(user.getAge());
-        assertThat(JsonPath.parse(responseBody).read("$[1].id", Long.class)).isEqualTo(2L);
         assertThat((String) JsonPath.read(responseBody, "$[1].email")).isEqualTo(user1.getEmail());
         assertThat((String) JsonPath.read(responseBody, "$[1].username")).isEqualTo(user1.getUsername());
         assertThat((Integer) JsonPath.read(responseBody, "$[1].age")).isEqualTo(user1.getAge());
@@ -107,8 +103,8 @@ class UserIntegrationTest {
         ResponseEntity<String> response = restTemplate.getForEntity("/users/1", String.class);
         assertThat(response.getStatusCode().value()).isEqualTo(200);
         String responseBody = response.getBody();
-        assertThat(JsonPath.parse(responseBody).read("$.id", Long.class)).isEqualTo(1L);
         assertThat((String) JsonPath.read(responseBody, "$.email")).isEqualTo(user.getEmail());
+        assertThat((Integer) JsonPath.read(responseBody, "$.age")).isEqualTo(user.getAge());
     }
 
     @Test
