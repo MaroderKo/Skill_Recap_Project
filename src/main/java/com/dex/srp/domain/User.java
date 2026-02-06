@@ -12,20 +12,24 @@ import java.util.regex.Pattern;
 @Table(name = "users")
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     @Column(unique = true, nullable = false, updatable = false, length = 320)
+    @EqualsAndHashCode.Include
     private String email;
 
     @Column(unique = true)
+    @EqualsAndHashCode.Include
     private String username;
 
     @Column
+    @EqualsAndHashCode.Include
     private Integer age;
 
     private static final Pattern EMAIL_PATTERN = Pattern
