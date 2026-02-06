@@ -47,7 +47,7 @@ public class User{
         if (username == null) {
             throw new DomainValidationException("username", "username is mandatory");
         } else if (username.length() < 5 || username.length() > 255) {
-            throw new DomainValidationException("username", "username length should be between 3 and 255 characters");
+            throw new DomainValidationException("username", "Username length must be >= 5 and <= 255 characters long");
         }
         this.username = username;
     }
