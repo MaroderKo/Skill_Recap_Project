@@ -34,9 +34,17 @@ class UserControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    private User createUser(String email, String username, int age) {
+        return User.builder()
+                .email(email)
+                .username(username)
+                .age(age)
+                .build();
+    }
+
     @Test
     void testFindAllUsers() throws Exception {
-        var users = List.of(new User(1L, "test@example.com", "user1", 18));
+        var users = List.of(createUser("test@example.com", "user1", 18));
         Mockito.when(userService.findAll()).thenReturn(users);
         mockMvc.perform(get("/users"))
                 .andExpect(status().isOk())
@@ -47,7 +55,7 @@ class UserControllerTest {
 
     @Test
     void testPositiveFindUserById() throws Exception {
-        User user = new User(1L, "test@example.com", "user1", 18);
+        User user = createUser("test@example.com", "user1", 18);
         Mockito.when(userService.findById(1)).thenReturn(user);
         mockMvc.perform(get("/users/1"))
                 .andExpect(status().isOk())
@@ -68,7 +76,7 @@ class UserControllerTest {
     @Test
     void testUpdateUser() throws Exception {
         UserDto userDto = new UserDto(null, "user1", 18);
-        Mockito.when(userService.update(1, userDto)).thenReturn(new User(1L, "test@example.com", "user1", 18));
+        Mockito.when(userService.update(1, userDto)).thenReturn(createUser("test@example.com", "user1", 18));
 
         mockMvc.perform(patch("/users/1").content(objectMapper.writeValueAsString(userDto)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

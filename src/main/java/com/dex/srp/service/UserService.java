@@ -31,8 +31,11 @@ public class UserService {
      */
     @Transactional
     public User save(UserDto userDto) {
-        return userRepository.save(new User(null, userDto.email(), userDto.username(), userDto.age()));
-    }
+        User user = User.builder()
+            .email(userDto.email())
+            .username(userDto.username())
+            .age(userDto.age()) .build();
+        return userRepository.save(user); }
 
     /**
      * Returns all users.
@@ -63,9 +66,8 @@ public class UserService {
      * @param dto data to update
      * @return updated user
      * @throws UserNotFoundException when user with given id does not exist
-     * @throws IllegalArgumentException when one of fields is not valid
      */
-    @Transactional(rollbackFor = IllegalArgumentException.class)
+    @Transactional
     public User update(long id, UserDto dto) {
         User user = getUserOrThrow(id);
         if (dto.username() != null) {
