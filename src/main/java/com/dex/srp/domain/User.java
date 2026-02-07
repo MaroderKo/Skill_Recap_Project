@@ -38,16 +38,16 @@ public class User{
 
     @Builder
     public User(String email, String username, Integer age) {
-        changeEmail(email);
+        setEmail(email);
         if (username != null) {
-            changeUsername(username);
+            setUsername(username);
         }
         if (age != null) {
-            changeAge(age);
+            setAge(age);
         }
     }
 
-    public void changeUsername(String username) {
+    public void setUsername(String username) {
         if (username == null) {
             throw new DomainValidationException("username", "username is mandatory");
         } else if (username.length() < 5 || username.length() > 255) {
@@ -56,7 +56,7 @@ public class User{
         this.username = username;
     }
 
-    public void changeEmail(String email) {
+    public void setEmail(String email) {
         if (email == null) {
             throw new DomainValidationException("email", "email is mandatory");
         }
@@ -74,12 +74,9 @@ public class User{
         }
     }
 
-    public void changeAge(Integer age) {
-        if (age == null) {
-            return;
-        }
+    public void setAge(Integer age) {
         if (age < 0 || age > 100) {
-            throw new DomainValidationException("age", "age should be between 0 and 100");
+            throw new DomainValidationException("age", "age should be between >=0 and <=100");
         }
         this.age = age;
     }

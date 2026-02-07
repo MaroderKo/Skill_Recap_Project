@@ -71,10 +71,10 @@ public class UserService {
     public User update(long id, UserDto dto) {
         User user = getUserOrThrow(id);
         if (dto.username() != null) {
-            user.changeUsername(dto.username());
+            user.setUsername(dto.username());
         }
         if (dto.age() != null) {
-            user.changeAge(dto.age());
+            user.setAge(dto.age());
         }
         return user;
     }
