@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 
 @AllArgsConstructor
 public enum ErrorCode {
-    ENTITY_NOT_FOUND(HttpStatus.NOT_FOUND, "User not found"),
+    ENTITY_NOT_FOUND(HttpStatus.NOT_FOUND, "Entity not found"),
     VALIDATION_FAILED(HttpStatus.BAD_REQUEST, "Validation failed");
 
     @Getter
