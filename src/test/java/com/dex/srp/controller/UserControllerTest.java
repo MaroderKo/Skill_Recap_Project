@@ -69,8 +69,9 @@ class UserControllerTest {
         Mockito.when(userService.findById(1)).thenThrow(new UserNotFoundException(1L));
         mockMvc.perform(get("/users/1"))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value("User not found"))
-                .andExpect(jsonPath("$.error_code").value("ENTITY_NOT_FOUND"));
+                .andExpect(jsonPath("$.message").value("Entity not found"))
+                .andExpect(jsonPath("$.error_code").value("ENTITY_NOT_FOUND"))
+                .andExpect(jsonPath("$.details.user_id").value("User with id 1 not found"));
     }
 
     @Test
