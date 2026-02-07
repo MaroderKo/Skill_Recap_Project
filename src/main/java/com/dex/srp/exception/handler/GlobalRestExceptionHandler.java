@@ -3,6 +3,7 @@ package com.dex.srp.exception.handler;
 import com.dex.srp.domain.ErrorCode;
 import com.dex.srp.domain.ErrorResponseDTO;
 import com.dex.srp.exception.ApiException;
+import com.dex.srp.exception.DomainValidationException;
 import com.dex.srp.util.TraceIdProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -48,5 +49,15 @@ public class GlobalRestExceptionHandler {
                                 .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage, (a, b) -> a.concat(", ").concat(b)))
                 )
         );
+    }
+
+    @ExceptionHandler(DomainValidationException.class)
+    public ResponseEntity<ErrorResponseDTO> handleDomainValidationException(DomainValidationException ex, HttpServletRequest request) {
+        ErrorCode errorCode = ErrorCode.VALIDATION_FAILED;
+        return ResponseEntity.status(errorCode.getHttpStatus())
+                .body(buildResponse(errorCode,
+                        request.getRequestURI(),
+                        Map.of(ex.getField(),
+                                ex.getMessage())));
     }
 }

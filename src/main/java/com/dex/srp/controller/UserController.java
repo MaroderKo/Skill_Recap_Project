@@ -1,6 +1,5 @@
 package com.dex.srp.controller;
 
-import com.dex.srp.domain.User;
 import com.dex.srp.domain.ValidationGroup;
 import com.dex.srp.domain.dto.UserDto;
 import com.dex.srp.service.UserService;
@@ -20,23 +19,23 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> save(@Validated(ValidationGroup.OnCreate.class) @RequestBody UserDto userDto) {
-        return ResponseEntity.ok(userService.save(userDto));
+    public ResponseEntity<UserDto> save(@Validated(ValidationGroup.OnCreate.class) @RequestBody UserDto userDto) {
+        return ResponseEntity.ok(new UserDto(userService.save(userDto)));
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> findAll() {
-        return ResponseEntity.ok(userService.findAll());
+    public ResponseEntity<List<UserDto>> findAll() {
+        return ResponseEntity.ok(userService.findAll().stream().map(UserDto::new).toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> findById(@PathVariable long id) {
-        return ResponseEntity.ok(userService.findById(id));
+    public ResponseEntity<UserDto> findById(@PathVariable long id) {
+        return ResponseEntity.ok(new UserDto(userService.findById(id)));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<User> update(@PathVariable long id, @Validated(ValidationGroup.OnUpdate.class) @RequestBody UserDto dto) {
-        return ResponseEntity.ok(userService.update(id, dto));
+    public ResponseEntity<UserDto> update(@PathVariable long id, @Validated(ValidationGroup.OnUpdate.class) @RequestBody UserDto dto) {
+        return ResponseEntity.ok(new UserDto(userService.update(id, dto)));
     }
 
     @DeleteMapping("/{id}")
