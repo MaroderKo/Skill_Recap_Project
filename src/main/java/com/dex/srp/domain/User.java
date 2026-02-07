@@ -21,15 +21,12 @@ public class User{
     private Long id;
 
     @Column(unique = true, nullable = false, updatable = false, length = 320)
-    @EqualsAndHashCode.Include
     private String email;
 
     @Column(unique = true)
-    @EqualsAndHashCode.Include
     private String username;
 
     @Column
-    @EqualsAndHashCode.Include
     private Integer age;
 
     private static final Pattern EMAIL_PATTERN = Pattern
