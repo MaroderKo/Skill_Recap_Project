@@ -63,11 +63,11 @@ public class User{
         if (email.length() < 8 || email.length() > 320) {
             throw new DomainValidationException("email", "Email length must be >= 8 and <= 320 characters long");
         }
-        Matcher emailMatcher = EMAIL_PATTERN.matcher(email);
+        Matcher emailMatcher = EMAIL_PATTERN.matcher(email.toLowerCase());
         if (!emailMatcher.matches()) {
             throw new DomainValidationException("email", "Email must be in proper email format");
         } else {
-            this.email = email;
+            this.email = email.toLowerCase();
         }
     }
 
