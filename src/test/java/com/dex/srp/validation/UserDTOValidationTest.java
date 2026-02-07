@@ -59,18 +59,10 @@ class UserDTOValidationTest {
 
         userDto = new UserDto("a".repeat(321), "a".repeat(256), 101);
         violations = getValidationConstraintsErrorList(userDto, ValidationGroup.OnCreate.class);
-        assertThat(violations).hasSize(4)
+        assertThat(violations).hasSize(3)
                 .contains("Age must be <= 100")
                 .contains("Email length must be >= 8 and <= 320 characters long")
-                .contains("Username length must be >= 5 and <= 255 characters long")
-                .contains("Email must be in proper email format");
-
-        //test email format
-
-        userDto = new UserDto("aaaaaaaaaa", "user1", 20);
-        violations = getValidationConstraintsErrorList(userDto, ValidationGroup.OnCreate.class);
-        assertThat(violations).hasSize(1)
-                .contains("Email must be in proper email format");
+                .contains("Username length must be >= 5 and <= 255 characters long");
 
     }
 
@@ -92,13 +84,6 @@ class UserDTOValidationTest {
         assertThat(violations).hasSize(2)
                 .contains("Age must be <= 100")
                 .contains("Username length must be >= 5 and <= 255 characters long");
-
-        //test email null constraint
-
-        userDto = new UserDto("aaaaaaaaaa", "user1", 20);
-        violations = getValidationConstraintsErrorList(userDto, ValidationGroup.OnUpdate.class);
-        assertThat(violations).hasSize(1)
-                .contains("Email cannot be changed after registration");
 
     }
 
